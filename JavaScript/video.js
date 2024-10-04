@@ -63,6 +63,18 @@ const cardDemo = {
 const displayVideos = videos => {
   const videosContainer = document.getElementById('videos');
   videosContainer.innerHTML = '';
+  if (videos.length == 0) {
+    videosContainer.classList.remove('grid');
+    videosContainer.innerHTML = `
+    <div class="max-h-screen flex flex-col gap-5 justify-center items-center">
+    <img class="" src="./Image/Icon.png"/>
+    <h class="text-2xl font-medium">No Content Here</h>
+    </div>
+    `;
+  } else {
+    videosContainer.classList.add('grid');
+  }
+
   videos.forEach(video => {
     const card = document.createElement('div');
     card.classList = 'card card-compact ';
@@ -78,7 +90,6 @@ const displayVideos = videos => {
               video.others.posted_date
             )}</span>`
       }
-      
   </figure>
   
   <div class="py-4 flex gap-2">
@@ -111,7 +122,6 @@ function getTimeString(time) {
   let reminigSecond = time % 3600;
   const minute = parseInt(reminigSecond / 60);
   const second = reminigSecond % 60;
-
   return `${hour} hour ${minute} minute ${second} second ago`;
 }
 
