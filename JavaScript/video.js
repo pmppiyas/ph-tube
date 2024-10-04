@@ -14,7 +14,7 @@ const displayCategories = categories => {
     //get Button
     const buttonContainer = document.createElement('div');
     buttonContainer.innerHTML = `
-    <button onclick="loadCategoryVideos(${element.category_id})" class="btn">${element.category}</button>
+    <button id="btn-${element.category_id}" onclick="loadCategoryVideos(${element.category_id})" class="btn category-btn">${element.category}</button>
     `;
     categoriesContainer.append(buttonContainer);
   });
@@ -28,37 +28,27 @@ const loadVideos = () => {
     .catch(err => console.log(err));
 };
 
+const removeActiveClass = () => {
+  const button = document.getElementsByClassName('category-btn');
+  for (let btn of button) {
+    btn.classList.remove('active');
+  }
+};
+
 const loadCategoryVideos = id => {
   //fetch catagory video
   fetch(`https://openapi.programming-hero.com/api/phero-tube/category/${id}`)
     .then(res => res.json())
-    .then(data => displayVideos(data.category))
+    .then(data => {
+      //remove active class
+      removeActiveClass();
+      const activeBtn = document.getElementById(`btn-${id}`);
+      activeBtn.classList.add('active');
+      displayVideos(data.category);
+    })
     .catch(err => console.log(err));
 };
-// "categories": [
-//     {
-//       "category_id": "1001",
-//       "category": "Music"
-//     },
-const cardDemo = {
-  category_id: '1003',
-  video_id: 'aaai',
-  thumbnail: 'https://i.ibb.co/kc8CCFs/30-rock.png',
-  title: '30 Rock',
-  authors: [
-    {
-      profile_picture: 'https://i.ibb.co/YZN9rQZ/tina.jpg',
-      profile_name: 'Tina Fey',
-      verified: false,
-    },
-  ],
-  others: {
-    views: '4.5K',
-    posted_date: '14800',
-  },
-  description:
-    "'30 Rock,' led by Tina Fey, is a comedy series that has garnered 4.5K views. The show is a witty and humorous take on the behind-the-scenes antics of a fictional live comedy show. With its sharp writing and unforgettable characters, '30 Rock' is perfect for fans of smart, satirical humor and engaging storylines.",
-};
+
 // Display Videos
 const displayVideos = videos => {
   const videosContainer = document.getElementById('videos');
